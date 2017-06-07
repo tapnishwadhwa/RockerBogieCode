@@ -11,6 +11,7 @@ Gyroscope gyro;
 Servo myservo;  
 const int calibrate = 4;
 bool fail;
+int pos = 0;
 
 int8_t gatherAverage(double * avgX, double * avgY, double * avgZ)
 {
@@ -145,7 +146,8 @@ void setup()
     Serial.println();
     Serial.println("If your new averages are close to 0 you've");
     Serial.println("gathered good offset values.");
-
+    double x, y, z;
+gyro.readDegPerSecond(&x, &y, &z) == 1;
 }
 
 const int Kp = 0.5;
@@ -168,7 +170,7 @@ void loop() {
 
     // Read degrees per second
     // Note: You can also read the raw data by calling
-    //       readRaw() - readRaw takes int16_t instead of doubles
+//    readRaw() 
     if (gyro.readDegPerSecond(&x, &y, &z) != 0)
     {
         Serial.println("Failed to read gyroscope");
@@ -182,24 +184,36 @@ void loop() {
     Serial.print(y);
     Serial.print(" Z: ");
     Serial.println(z);
-
+/*
 if (x > 25){
   myservo.writeMicroseconds(1400);
-  delay(15);
+  delay(500);
 }
     
     
 
 else if(x < -25){
   myservo.writeMicroseconds(1600);
-  delay(15);
+  delay(500);
 }
 
-else if (x > -25 && x< 25){
+else if (x > -25 && x < 25){
   myservo.writeMicroseconds(1500);
   
-}
-  
-  
-  
+}*/
+
+ for (pos = 0; pos <= x; pos += 1) { // goes from 0 degrees to 180 degrees
+    // in steps of 1 degree
+    myservo.write(pos);              // tell servo to go to position in variable 'pos'
+    delay(1);                       // waits 15ms for the servo to reach the position
   }
+  for (pos = -x; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
+    myservo.write(pos);              // tell servo to go to position in variable 'pos'
+    delay(15);                       // waits 15ms for the servo to reach the position
+  }
+}
+
+  
+  
+  
+  
