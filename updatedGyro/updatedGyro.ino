@@ -51,7 +51,7 @@ int8_t gatherAverage(double * avgX, double * avgY, double * avgZ)
 
 void setup()
 {
-    Serial.begin(57600);
+    Serial.begin(5600);
 
 
 
